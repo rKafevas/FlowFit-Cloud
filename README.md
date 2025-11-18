@@ -14,7 +14,7 @@ Sistema completo desenvolvido para auxiliar academias, escolas e pequenos negóc
 
 - **Frontend:** HTML5, CSS3, JavaScript (Vanilla)
 - **Backend:** Python 3.8+ com Flask
-- **Banco de Dados:** SQLite3
+- **Banco de Dados:** Mysql
 - **Autenticação:** JWT (JSON Web Tokens)
 
 ## 📁 Estrutura do Projeto
