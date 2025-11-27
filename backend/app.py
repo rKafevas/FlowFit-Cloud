@@ -21,24 +21,33 @@ CORS(app)  # Permite requisições do frontend
 import os
 
 # Configuração para produção (Render)
+# ==================== CONFIGURAÇÃO DO BANCO ====================
+
+import os
+
 def get_database_uri():
-    # Se estiver no Render, usa a connection string do banco de dados
+    # Tenta usar MySQL do Render primeiro
     if 'RENDER' in os.environ:
-        # O Render fornece a connection string completa
-        return os.environ.get('DATABASE_URL', '').replace('mysql://', 'mysql+mysqlconnector://')
+        # PostgreSQL do Render (padrão)
+        database_url = os.environ.get('DATABASE_URL', '')
+        if database_url:
+            # Converte para PostgreSQL (mais comum no Render)
+            return database_url.replace('postgres://', 'postgresql://')
+        
+        # MySQL customizado (se você criar)
+        mysql_uri = os.environ.get('SQLALCHEMY_DATABASE_URI')
+        if mysql_uri:
+            return mysql_uri
     
-    # Se estiver usando o serviço de banco do Render via render.yaml
-    render_db_uri = os.environ.get('SQLALCHEMY_DATABASE_URI')
-    if render_db_uri:
-        return render_db_uri
-    
-    # Desenvolvimento local (fallback)
-    return 'mysql+mysqlconnector://root:2Abcsp%40drao@localhost/flowfit'
+    # SQLite para desenvolvimento/teste
+    return 'sqlite:///flowfit.db'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Inicializa o banco de dados com as novas configurações
+print(f"Usando banco: {app.config['SQLALCHEMY_DATABASE_URI']}")
+
+# Inicializa o banco
 database.init_db(app)
 
 # ==================== ROTAS DE AUTENTICAÇÃO ====================
