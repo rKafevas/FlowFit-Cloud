@@ -232,7 +232,7 @@ def listar_pagamentos(cliente_id=None, status=None, mes=None):
         query = query.filter(Pagamento.status == status)
     
     if mes:
-        query = query.filter(db.func.date_format(Pagamento.vencimento, '%Y-%m') == mes)
+        query = query.filter(db.func.to_char(Pagamento.data_pagamento, 'YYYY-MM') == mes)
     
     pagamentos = query.order_by(Pagamento.vencimento.desc()).all()
     
@@ -337,7 +337,7 @@ def obter_estatisticas():
     valor_recebido_mes_result = db.session.query(db.func.sum(Pagamento.valor))\
         .filter(
             Pagamento.status == 'pago',
-            db.func.date_format(Pagamento.data_pagamento, '%Y-%m') == mes_atual
+            db.func.to_char(Pagamento.data_pagamento, 'YYYY-MM') == mes_atual
         ).first()
     valor_recebido_mes = valor_recebido_mes_result[0] or 0
     
@@ -345,7 +345,7 @@ def obter_estatisticas():
     clientes_pagaram_mes = db.session.query(db.func.count(db.func.distinct(Pagamento.cliente_id)))\
         .filter(
             Pagamento.status == 'pago',
-            db.func.date_format(Pagamento.data_pagamento, '%Y-%m') == mes_atual
+            db.func.to_char(Pagamento.data_pagamento, 'YYYY-MM') == mes_atual
         ).first()[0] or 0
     
     return {
@@ -402,7 +402,7 @@ def obter_clientes_pagaram_mes():
         db.func.max(Pagamento.data_pagamento).label('ultimo_pagamento')
     ).join(Pagamento).filter(
         Pagamento.status == 'pago',
-        db.func.date_format(Pagamento.data_pagamento, '%Y-%m') == mes_atual
+        db.func.to_char(Pagamento.data_pagamento, 'YYYY-MM') == mes_atual
     ).group_by(Cliente.id).order_by(Cliente.nome).all()
     
     return [{
