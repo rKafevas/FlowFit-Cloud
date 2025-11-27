@@ -9,23 +9,17 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar requirements.txt da RAIZ
+# Copiar requirements.txt
 COPY requirements.txt .
 
 # Instalar dependências Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar TODO o conteúdo da pasta backend para /app
-COPY backend/ .
+# Copiar TODO o projeto
+COPY . .
 
-# === DEBUG: VERIFICAR ESTRUTURA DE ARQUIVOS ===
-RUN echo "=== ESTRUTURA DE ARQUIVOS ==="
-RUN pwd
-RUN ls -la
-RUN echo "=== CONTEÚDO DA PASTA BACKEND ==="
-RUN ls -la backend/
-RUN echo "=== VERIFICANDO app.py ==="
-RUN find . -name "app.py" -type f
+# Mudar para a pasta backend
+WORKDIR /app/backend
 
 # Expor a porta da aplicação
 EXPOSE 5000
