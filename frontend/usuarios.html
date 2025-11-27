@@ -144,7 +144,7 @@
         // Carrega lista de usuários
         async function carregarUsuarios() {
             try {
-                const response = await fetchAuth(`${API_URL}/usuarios`);
+                const response = await fetchAuth(`/usuarios/${id}`);
                 const usuarios = await response.json();
 
                 const tbody = document.getElementById('lista-usuarios');
@@ -216,7 +216,7 @@
         // Editar usuário
         async function editarUsuario(id) {
             try {
-                const response = await fetchAuth(`${API_URL}/usuarios/${id}`);
+                const response = await fetchAuth('/usuarios');
                 const usuario = await response.json();
 
                 editandoUsuarioId = id;
@@ -279,13 +279,13 @@
                 
                 if (editandoUsuarioId) {
                     // Atualizar usuário existente
-                    response = await fetchAuth(`${API_URL}/usuarios/${editandoUsuarioId}`, {
+                    response = await fetchAuth(`/usuarios/${editandoUsuarioId}`, {
                         method: 'PUT',
                         body: JSON.stringify(dados)
                     });
                 } else {
                     // Criar novo usuário
-                    response = await fetchAuth(`${API_URL}/usuarios`, {
+                    response = await fetchAuth('/usuarios', {
                         method: 'POST',
                         body: JSON.stringify(dados)
                     });
@@ -324,7 +324,7 @@
             }
 
             try {
-                const response = await fetchAuth(`${API_URL}/usuarios/${id}`, {
+                const response = await fetchAuth(`/usuarios/${id}`, {
                     method: 'DELETE'
                 });
 
