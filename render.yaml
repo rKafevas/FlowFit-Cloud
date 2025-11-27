@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: flowfit-backend
+    env: docker
+    docker:
+      dockerfile: Dockerfile
+    envVars:
+      - key: SQLALCHEMY_DATABASE_URI
+        fromDatabase:
+          name: flowfit-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+    healthCheckPath: /api/status
+    port: 5000
+
+databases:
+  - name: flowfit-db
+    databaseName: flowfit
+    user: flowfit_user
+    plan: free
