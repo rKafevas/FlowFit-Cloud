@@ -140,7 +140,7 @@
         async function carregarDashboard() {
             try {
                 // Carrega estatísticas
-                const resStats = await fetchAuth(`${API_URL}/dashboard`);
+                const resStats = await fetchAuth('/dashboard');
                 const stats = await resStats.json();
 
                 // Atualiza cards
@@ -163,7 +163,7 @@
         // Carrega clientes que pagaram este mês
         async function carregarClientesPagaram() {
             try {
-                const response = await fetchAuth(`${API_URL}/pagamentos/mes-atual`);
+                const response = await fetchAuth('/pagamentos/mes-atual');
                 const clientes = await response.json();
 
                 const tbody = document.getElementById('lista-pagaram-mes');
@@ -201,7 +201,7 @@
         // Carrega preview dos inadimplentes (top 5)
         async function carregarInadimplentesPreview() {
             try {
-                const response = await fetchAuth(`${API_URL}/inadimplentes`);
+                const response = await fetchAuth('/inadimplentes');
                 const inadimplentes = await response.json();
 
                 const container = document.getElementById('lista-inadimplentes-preview');
