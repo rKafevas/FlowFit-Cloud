@@ -2,11 +2,12 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Instalar dependências do sistema
+# Instalar dependências do sistema + curl para health check
 RUN apt-get update && apt-get install -y \
     default-libmysqlclient-dev \
     build-essential \
     pkg-config \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copiar requirements primeiro (para melhor cache do Docker)
@@ -15,8 +16,9 @@ COPY requirements.txt .
 # Instalar dependências Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar código da aplicação
+# Copiar backend E frontend
 COPY backend/ .
+COPY frontend/ ./frontend/
 
 # Criar usuário não-root para segurança (opcional)
 RUN useradd -m -r appuser && chown -R appuser:appuser /app

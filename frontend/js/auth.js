@@ -87,8 +87,15 @@ function verificarAutenticacao() {
  * @param {Object} options - Opções do fetch
  * @returns {Promise} Resposta da API
  */
-async function fetchAuth(url, options = {}) {
+/**
+ * Faz requisição autenticada à API
+ * @param {string} endpoint - Endpoint da API (sem /api)
+ * @param {Object} options - Opções do fetch
+ * @returns {Promise} Resposta da API
+ */
+async function fetchAuth(endpoint, options = {}) {
     const token = obterToken();
+    const url = `${API_URL}${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`;
     
     // Adiciona token no header
     const headers = {
@@ -118,7 +125,6 @@ async function fetchAuth(url, options = {}) {
         throw error;
     }
 }
-
 /**
  * Inicializa informações do usuário no header
  */

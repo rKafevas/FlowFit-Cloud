@@ -14,13 +14,16 @@ import auth
 app = Flask(__name__)
 CORS(app)  # Permite requisições do frontend
 
-# ==================== CONFIGURAÇÃO DO BANCO MYSQL ====================
+@app.route('/')
+def serve_frontend():
+    """Serve a página inicial do frontend"""
+    return send_from_directory(app.static_folder, 'login.html')
 
-# Configuração MySQL - Substitui o SQLite
-# Configuração MySQL - Usa variável de ambiente ou valor padrão
-import os
+@app.route('/<path:path>')
+def serve_static_files(path):
+    """Serve todos os arquivos estáticos (CSS, JS, imagens)"""
+    return send_from_directory(app.static_folder, path)
 
-# Configuração para produção (Render)
 # ==================== CONFIGURAÇÃO DO BANCO ====================
 
 import os
