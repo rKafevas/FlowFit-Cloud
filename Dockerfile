@@ -16,9 +16,11 @@ COPY requirements.txt .
 # Instalar dependências Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar backend E frontend
+# Copiar backend
 COPY backend/ .
-COPY frontend/ ./frontend/
+
+# Copiar frontend - CORRIGIDO: sem ./ antes
+COPY frontend/ frontend/
 
 # Criar usuário não-root para segurança (opcional)
 RUN useradd -m -r appuser && chown -R appuser:appuser /app
