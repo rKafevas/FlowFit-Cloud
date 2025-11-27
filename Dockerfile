@@ -2,28 +2,37 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# Instalar dependências do sistema
 RUN apt-get update && apt-get install -y \
     default-libmysqlclient-dev \
     build-essential \
     pkg-config \
-    tree \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar requirements.txt
+# Copiar requirements primeiro (para melhor cache do Docker)
 COPY requirements.txt .
 
+# Instalar dependências Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar TODO o projeto
-COPY . .
+# Copiar código da aplicação
+COPY backend/ .
 
-# DEBUG COMPLETO
-RUN echo "=== ESTRUTURA COMPLETA COM tree ===" && tree -a || ls -la
-RUN echo "=== TODOS OS ARQUIVOS .py ===" && find . -name "*.py" -type f
-RUN echo "=== TODOS OS ARQUIVOS E PASTAS ===" && find . -type f | head -20
-RUN echo "=== VERIFICANDO BACKEND ===" && ls -la backend/ 2>/dev/null || echo "Pasta backend não existe"
+# Criar usuário não-root para segurança (opcional)
+RUN useradd -m -r appuser && chown -R appuser:appuser /app
+USER appuser
 
+# Expor a porta da aplicação
 EXPOSE 5000
 
-# Apenas mostrar estrutura, não executar
-CMD ["sh", "-c", "echo '=== ESTRUTURA FINAL ===' && find . -name '*.py' -type f && echo '=== LISTA COMPLETA ===' && find . -type f | sort"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:5000/api/status || exit 1
+
+# Variáveis de ambiente
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
+ENV PYTHONUNBUFFERED=1
+
+# Comando para rodar a aplicação
+CMD ["python", "app.py"]
