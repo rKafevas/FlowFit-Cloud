@@ -7,7 +7,7 @@ db = SQLAlchemy()
 
 def init_db(app):
     """
-    Inicializa o banco de dados MySQL com as tabelas necessárias
+    Inicializa o banco de dados PostgreSQL com as tabelas necessárias
     """
     # Configura o SQLAlchemy com o app Flask
     db.init_app(app)
@@ -37,14 +37,16 @@ def init_db(app):
                 db.session.add(admin)
                 db.session.commit()
                 
-                print("   Usuário admin criado:")
+                print("✅ Usuário admin criado:")
                 print("   Email: admin@sistema.com")
                 print("   Senha: admin123")
+            else:
+                print("✅ Usuário admin já existe")
             
-            print("✓ Banco de dados MySQL inicializado com sucesso!")
+            print("✅ Banco de dados PostgreSQL inicializado com sucesso!")
             
         except Exception as e:
-            print(f"✗ Erro ao inicializar banco de dados MySQL: {e}")
+            print(f"❌ Erro ao inicializar banco de dados: {e}")
             db.session.rollback()
             raise
 
