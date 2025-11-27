@@ -126,7 +126,7 @@
         // Carrega inadimplentes
         async function carregarInadimplentes() {
             try {
-                const response = await fetchAuth(`${API_URL}/inadimplentes`);
+                const response = await fetchAuth('/inadimplentes');
                 const inadimplentes = await response.json();
 
                 // Atualiza estatísticas

@@ -85,8 +85,8 @@
         async function carregarClientes(busca = '') {
             try {
                 const url = busca ? 
-                    `${API_URL}/clientes?busca=${encodeURIComponent(busca)}` : 
-                    `${API_URL}/clientes`;
+                    `/clientes?busca=${encodeURIComponent(busca)}` : 
+                    '/clientes';
 
                 const response = await fetchAuth(url);
                 const clientes = await response.json();
@@ -146,7 +146,7 @@
             }
 
             try {
-                const response = await fetchAuth(`${API_URL}/clientes/${id}`, {
+                const response = await fetchAuth(`/clientes/${id}`, {
                     method: 'DELETE'
                 });
 
