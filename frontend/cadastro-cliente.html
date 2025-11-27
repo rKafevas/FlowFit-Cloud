@@ -123,46 +123,47 @@
         aplicarMascaraCPF(document.getElementById('cpf'));
         aplicarMascaraTelefone(document.getElementById('telefone'));
 
-        // Salvar cliente
-        async function salvarCliente(event) {
-            event.preventDefault();
+        // Salvar cliente - CORRIGIDO
+async function salvarCliente(event) {
+    event.preventDefault();
 
-            const btnSalvar = document.getElementById('btn-salvar');
-            btnSalvar.disabled = true;
-            btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+    const btnSalvar = document.getElementById('btn-salvar');
+    btnSalvar.disabled = true;
+    btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
 
-            const dados = {
-                nome: document.getElementById('nome').value,
-                cpf: document.getElementById('cpf').value.replace(/\D/g, ''),
-                telefone: document.getElementById('telefone').value.replace(/\D/g, ''),
-                email: document.getElementById('email').value,
-                endereco: document.getElementById('endereco').value,
-                observacoes: document.getElementById('observacoes').value
-            };
+    const dados = {
+        nome: document.getElementById('nome').value,
+        cpf: document.getElementById('cpf').value.replace(/\D/g, ''),
+        telefone: document.getElementById('telefone').value.replace(/\D/g, ''),
+        email: document.getElementById('email').value,
+        endereco: document.getElementById('endereco').value,
+        observacoes: document.getElementById('observacoes').value
+    };
 
-            try {
-                const response = await fetchAuth(`${API_URL}/dashboard`, {
-                    method: 'POST',
-                    body: JSON.stringify(dados)
-                });
+    try {
+        // ✅ CORRETO: usa /clientes em vez de /dashboard
+        const response = await fetchAuth('/clientes', {
+            method: 'POST',
+            body: JSON.stringify(dados)
+        });
 
-                const resultado = await response.json();
+        const resultado = await response.json();
 
-                if (resultado.success) {
-                    alert('Cliente cadastrado com sucesso!');
-                    window.location.href = 'clientes.html';
-                } else {
-                    alert('Erro ao cadastrar cliente: ' + resultado.error);
-                    btnSalvar.disabled = false;
-                    btnSalvar.innerHTML = '<i class="fas fa-save"></i> Salvar Cliente';
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                alert('Erro ao cadastrar cliente');
-                btnSalvar.disabled = false;
-                btnSalvar.innerHTML = '<i class="fas fa-save"></i> Salvar Cliente';
-            }
+        if (resultado.success) {
+            alert('Cliente cadastrado com sucesso!');
+            window.location.href = 'clientes.html';
+        } else {
+            alert('Erro ao cadastrar cliente: ' + resultado.error);
+            btnSalvar.disabled = false;
+            btnSalvar.innerHTML = '<i class="fas fa-save"></i> Salvar Cliente';
         }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao cadastrar cliente');
+        btnSalvar.disabled = false;
+        btnSalvar.innerHTML = '<i class="fas fa-save"></i> Salvar Cliente';
+    }
+}
     </script>
 </body>
 </html>
