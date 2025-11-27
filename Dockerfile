@@ -9,19 +9,19 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar arquivos de requisitos
+# Copiar requirements.txt da RAIZ
 COPY requirements.txt .
 
 # Instalar dependências Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar o código da aplicação
-COPY . .
+# Copiar TODO o conteúdo da pasta backend para /app
+COPY backend/ .
 
 # Expor a porta da aplicação
 EXPOSE 5000
 
-# Variáveis de ambiente (serão sobrescritas pelo Render)
+# Variáveis de ambiente
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
