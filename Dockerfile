@@ -18,15 +18,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar TODO o projeto
 COPY . .
 
-# Mudar para a pasta backend
-WORKDIR /app/backend
+# DEBUG: Verificar estrutura completa
+RUN echo "=== ESTRUTURA COMPLETA ===" && ls -la
+RUN echo "=== PROCURANDO app.py ===" && find . -name "app.py" 2>/dev/null | head -5
+RUN echo "=== ARQUIVOS PYTHON ===" && find . -name "*.py" | head -10
 
-# Expor a porta da aplicação
+# Expor porta
 EXPOSE 5000
 
-# Variáveis de ambiente
-ENV FLASK_APP=app.py
-ENV FLASK_ENV=production
-
-# Comando para rodar a aplicação
-CMD ["python", "app.py"]
+# Tentar encontrar e executar app.py automaticamente
+CMD ["sh", "-c", "APP_FILE=$(find . -name app.py -type f | head -1); if [ -f \"$APP_FILE\" ]; then echo \"Executando: $APP_FILE\"; python \"$APP_FILE\"; else echo \"ERRO: app.py não encontrado!\"; find . -name \"*.py\" | head -10; exit 1; fi"]
