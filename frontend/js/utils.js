@@ -5,7 +5,7 @@
  */
 
 // URL base da API
-const API_URL = window.location.origin + '/api';
+const API_URL = 'https://flowfit-backend.onrender.com/api';
 
 /**
  * Formata valor para moeda brasileira (R$)
