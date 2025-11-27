@@ -12,17 +12,22 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar backend
-COPY backend/ .
+# Copiar TUDO do contexto de build
+COPY . .
 
-# Copiar frontend - método alternativo
-COPY frontend ./frontend/
+# Debug: verificar estrutura copiada
+RUN echo "=== ESTRUTURA COPIADA ===" && ls -la
+RUN echo "=== BACKEND ===" && ls -la backend/ 2>/dev/null || echo "Backend não encontrado"
+RUN echo "=== FRONTEND ===" && ls -la frontend/ 2>/dev/null || echo "Frontend não encontrado"
 
-# Debug: verificar se os arquivos foram copiados
-RUN echo "=== VERIFICANDO FRONTEND ===" && \
-    ls -la frontend/ && \
-    echo "=== ARQUIVOS HTML ===" && \
-    ls -la frontend/*.html
+# Mover arquivos do backend para o WORKDIR
+RUN if [ -d "backend" ]; then \
+        mv backend/* ./ && \
+        rm -rf backend && \
+        echo "Backend movido com sucesso"; \
+    else \
+        echo "Backend já está no lugar certo"; \
+    fi
 
 RUN useradd -m -r appuser && chown -R appuser:appuser /app
 USER appuser
