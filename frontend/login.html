@@ -79,6 +79,10 @@
     // URL da API - CORRIGIDA
     const API_URL = 'https://flowfit-backend.onrender.com/api';
 
+    // FORÇAR LIMPEZA DO TOKEN TEMPORARIAMENTE
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+
     /**
      * Função de Login
      */
@@ -135,7 +139,7 @@
         }
     }
 
-    // REMOVA ou COMENTE o redirecionamento automático:
+    // NÃO redireciona automaticamente - COMENTADO
     // if (localStorage.getItem('token')) {
     //     window.location.href = 'dashboard.html';
     // }
