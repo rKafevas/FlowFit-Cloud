@@ -28,29 +28,33 @@ def serve_static_files(path):
 
 import os
 
+# ==================== CONFIGURAÇÃO DO BANCO ====================
+
+import os
+
+# ==================== CONFIGURAÇÃO DO BANCO ====================
+
+import os
+
 def get_database_uri():
-    # Tenta usar MySQL do Render primeiro
+    # PostgreSQL do Render
     if 'RENDER' in os.environ:
-        # PostgreSQL do Render (padrão)
-        database_url = os.environ.get('DATABASE_URL', '')
+        database_url = os.environ.get('DATABASE_URL')
         if database_url:
-            # Converte para PostgreSQL (mais comum no Render)
+            print("=== USANDO POSTGRESQL ===")
+            # Converte para formato SQLAlchemy
             return database_url.replace('postgres://', 'postgresql://')
-        
-        # MySQL customizado (se você criar)
-        mysql_uri = os.environ.get('SQLALCHEMY_DATABASE_URI')
-        if mysql_uri:
-            return mysql_uri
     
-    # SQLite para desenvolvimento/teste
+    # SQLite para desenvolvimento
+    print("=== USANDO SQLITE (FALLBACK) ===")
     return 'sqlite:///flowfit.db'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-print(f"Usando banco: {app.config['SQLALCHEMY_DATABASE_URI']}")
+print(f"Database URL: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
-# Inicializa o banco
+# Inicializa o banco de dados
 database.init_db(app)
 
 # ==================== ROTAS DE AUTENTICAÇÃO ====================
